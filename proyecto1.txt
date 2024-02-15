@@ -1,0 +1,3 @@
+Inicio
+1. Obtener datos
+2. Filtrar datos
