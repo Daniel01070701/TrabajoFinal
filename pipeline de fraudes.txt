@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Obtener datos del archivo Excel') {
+            steps {
+                script {
+                    // Código para obtener los datos del archivo Excel
+                    // Puedes usar el plugin de Excel de Jenkins o alguna otra herramienta para esto
+                    def datosExcel = obtenerDatosExcel()
+                    def casosInvestigados = datosExcel.casosInvestigados
+                    def tipoCierre = datosExcel.tipoCierre
+                    
+                    // Imprimir los datos obtenidos para verificar
+                    echo "Casos Investigados: ${casosInvestigados}"
+                    echo "Tipo de Cierre: ${tipoCierre}"
+                }
+            }
+        }
+        
+        stage('Calcular Cantidad Total') {
+            steps {
+                script {
+                    // Calcular la cantidad total de casos por tipo de cierre
+                    def descarte = tipoCierre.count { it == 'Descarte' }
+                    def buena = tipoCierre.count { it == 'Buena' }
+                    def fraude = tipoCierre.count { it == 'Fraude' }
+                    def pendiente = tipoCierre.count { it == 'Pendiente' }
+                    
+                    def cantidadTotal = descarte + buena + fraude + pendiente
+                    
+                    // Imprimir la cantidad total
+                    echo "Cantidad Total de Casos: ${cantidadTotal}"
+                }
+            }
+        }
+    }
+}
